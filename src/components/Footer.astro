@@ -1,0 +1,89 @@
+---
+import { Icon } from 'astro-icon/components';
+import Socials from './Socials.astro';
+
+const socials = [
+  { label: 'Instagram', href: 'https://instagram.com/yourhandle', icon: 'simple-icons:instagram' },
+  { label: 'YouTube',   href: 'https://youtube.com/yourchannel', icon: 'simple-icons:youtube' },
+  { label: 'Etsy',      href: 'https://etsy.com/shop/yourshop',  icon: 'simple-icons:etsy' },
+  { label: 'Ko-fi',     href: 'https://ko-fi.com/yourpage',      icon: 'simple-icons:kofi' },
+];
+---
+
+<footer class="footer">
+
+    <div class="footer__image">
+        <img src="/astro.png" alt="Site logo" />
+    </div>
+
+    <Socials class="footer__socials" />
+
+  <p class="footer__copyright">
+     BlueNeek Studio. All rights reserved. &copy; {new Date().getFullYear()}
+  </p>
+
+</footer>
+
+<style>
+  .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 2rem;
+    gap: 1.25rem;
+  }
+
+  .footer__socials {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .footer__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    transition: opacity 0.2s ease;
+  }
+
+  .footer__social-link:hover {
+    opacity: 0.7;
+  }
+
+  .footer__social-icon {
+    width: 1.5625rem;
+    height: 1.5625rem;
+    fill: none;
+    stroke: #000000;
+    stroke-width: 1.5px;
+  }
+
+  .footer__copyright {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .footer__image img {
+    height: 250px;
+    width: auto;
+    transform: rotate(-25deg);
+    animation: float 4s ease-in-out infinite, float-shadow 4s ease-in-out infinite;
+  }
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(-8deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+</style>

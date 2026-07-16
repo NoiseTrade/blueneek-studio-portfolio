@@ -1,0 +1,60 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const socials = [
+  { label: 'Instagram', href: 'https://instagram.com/yourhandle', icon: 'simple-icons:instagram' },
+  { label: 'YouTube',   href: 'https://youtube.com/yourchannel', icon: 'simple-icons:youtube' },
+  { label: 'Etsy',      href: 'https://etsy.com/shop/yourshop',  icon: 'simple-icons:etsy' },
+  { label: 'Ko-fi',     href: 'https://ko-fi.com/yourpage',      icon: 'simple-icons:kofi' },
+];
+---
+<div class:list={['socials', className]}>
+  {socials.map((social) => (
+    <a
+      class="socials__link"
+      href={social.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={social.label}
+    >
+      <Icon class="socials__icon" name={social.icon} />
+    </a>
+  ))}
+</div>
+
+
+<style>
+  .socials {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .socials__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    transition: opacity 0.2s ease;
+  }
+
+  .socials__link:hover {
+    opacity: 0.7;
+  }
+
+  .socials__icon {
+    width: 1.5625rem;
+    height: 1.5625rem;
+    fill: none;
+    stroke: #000000;
+    stroke-width: 1.5px;
+  }
+</style>

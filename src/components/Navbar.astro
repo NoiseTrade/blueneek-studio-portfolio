@@ -1,0 +1,126 @@
+---
+import Socials from './Socials.astro';
+
+interface Link {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  links?: Link[];
+}
+
+const { links = [] } = Astro.props;
+const isAbout = Astro.url.pathname === '/about';
+
+const socials = [
+  { label: 'Instagram', href: 'https://instagram.com/yourhandle', icon: 'simple-icons:instagram' },
+  { label: 'YouTube',   href: 'https://youtube.com/yourchannel', icon: 'simple-icons:youtube' },
+  { label: 'Etsy',      href: 'https://etsy.com/shop/yourshop',  icon: 'simple-icons:etsy' },
+  { label: 'Ko-fi',     href: 'https://ko-fi.com/yourpage',      icon: 'simple-icons:kofi' },
+];
+---
+
+<header class="navbar">
+  <div class="navbar__logo">
+    <a href="/">
+      <img src="/logo.png" alt="Site logo" />
+    </a>
+  </div>
+
+  <nav class="navbar__nav">
+    <ul class="navbar__list">
+      {links.map((link) => (
+        <li class="navbar__item">
+          <a
+            class="navbar__link"
+            href={isAbout ? `/${link.href}` : link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li class="navbar__item">
+        <a
+          class="navbar__link"
+          href="/about"
+          data-astro-prefetch
+        >
+          About
+        </a>
+      </li>
+    </ul>
+  </nav>
+<Socials class='navbar__socials' /> 
+</header>
+
+<style>
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 1.5rem 2rem;
+  }
+
+  .navbar__logo {
+    margin-bottom: 1rem;
+  }
+
+  .navbar__logo img {
+    display: block;
+    height: 280px;
+    width: auto;
+  }
+
+  .navbar__nav {
+    width: 100%;
+  }
+
+  .navbar__list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar__link {
+    text-decoration: none;
+  }
+
+  .navbar__link:hover {
+    text-decoration: underline;
+  }
+
+  .navbar__socials {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .navbar__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    transition: opacity 0.2s ease;
+  }
+
+  .navbar__social-link:hover {
+    opacity: 0.7;
+  }
+
+  .navbar__social-icon {
+    width: 1.5625rem;
+    height: 1.5625rem;
+    fill: none;
+    stroke: #000000;
+  }
+</style>

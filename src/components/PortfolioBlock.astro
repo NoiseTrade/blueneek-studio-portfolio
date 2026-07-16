@@ -1,0 +1,200 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  heading: string;
+  gallery: string;
+}
+
+interface AltEntry {
+  file: string;
+  alt: string;
+}
+
+const { heading, gallery } = Astro.props;
+
+const sectionId = heading.toLowerCase().replace(/\s+/g, '-');
+
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+  ['/src/assets/**/*.webp', '/src/assets/**/*.jpg', '/src/assets/**/*.JPG']
+);
+
+const allJsonFiles = import.meta.glob<{ default: AltEntry[] }>(
+  '/src/assets/**/index.json',
+  { eager: true }
+);
+
+const jsonKey = `${gallery}/index.json`;
+const altEntries: AltEntry[] = allJsonFiles[jsonKey]?.default ?? [];
+
+const altMap = Object.fromEntries(altEntries.map((e) => [e.file, e.alt]));
+
+const filteredImages = Object.entries(allImages)
+  .filter(([path]) => path.startsWith(gallery))
+  .map(([path, resolver]) => ({ path, resolver }));
+
+const resolvedImages = await Promise.all(
+  filteredImages.map(async ({ path, resolver }) => {
+    const img = await resolver();
+    const filename = path.split('/').pop() ?? '';
+    const alt = altMap[filename] ?? filename.replace(/[-_]/g, ' ').replace(/\.[^.]+$/, '');
+    return { img, alt };
+  })
+);
+
+---
+
+<section class="portfolio-block" id={sectionId}>
+  <h2 class="portfolio-block__heading">{heading}</h2>
+
+  <div class="portfolio-block__grid">
+    {resolvedImages.map(({ img, alt }, i) => (
+      <button
+        class="portfolio-block__cell"
+        data-index={i}
+        aria-label={`View ${heading} image ${i + 1}`}
+      >
+        <Image
+          class="portfolio-block__image"
+          src={img.default}
+          alt={alt}
+          widths={[400, 800]}
+          sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        />
+      </button>
+    ))}
+  </div>
+</section>
+
+<dialog class="lightbox" data-section={sectionId} aria-label={`${heading} lightbox`}>
+  <button class="lightbox__close" aria-label="Close lightbox">&#x2715;</button>
+  <div class="lightbox__content">
+    <img class="lightbox__image" src="" alt="" />
+  </div>
+</dialog>
+
+<style>
+  .portfolio-block {
+    width: 100%;
+    padding: 4rem 2rem;
+  }
+
+  .portfolio-block__heading {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 36px;
+    color: #2D2C2B;
+   @media (min-width: 768px) {
+        font-size: 40px;
+    }
+  }
+
+  .portfolio-block__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1rem;
+  }
+
+.portfolio-block__cell {
+  all: unset;
+  cursor: pointer;
+  display: block;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background: #f0f0f0; /* optional, fills empty space around contain */
+}
+
+.portfolio-block__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+  .portfolio-block__cell:hover .portfolio-block__image {
+    transform: scale(1.03);
+    opacity: 0.9;
+  }
+
+  /* Lightbox */
+
+  .lightbox {
+    border: none;
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+
+  .lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.85);
+    cursor: pointer;
+  }
+
+  .lightbox__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+.lightbox__image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  transition: opacity 0.2s ease;
+}
+
+  .lightbox__close {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.25rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .lightbox__close:hover {
+    opacity: 0.7;
+  }
+</style>
+
+<script define:vars={{ sectionId }}>
+  const section = document.getElementById(sectionId);
+  const dialog = document.querySelector(`.lightbox[data-section="${sectionId}"]`);
+  const lightboxImg = dialog?.querySelector('.lightbox__image');
+  const closeBtn = dialog?.querySelector('.lightbox__close');
+  const cells = section?.querySelectorAll('.portfolio-block__cell');
+
+cells?.forEach((cell) => {
+  cell.addEventListener('click', () => {
+    const img = cell.querySelector('img');
+    if (!img || !lightboxImg || !dialog) return;
+    
+    lightboxImg.style.opacity = '0';
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    
+    dialog.showModal();
+
+    lightboxImg.onload = () => {
+      lightboxImg.style.opacity = '1';
+    };
+  });
+});
+
+  closeBtn?.addEventListener('click', () => dialog?.close());
+
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>
