@@ -1,39 +1,47 @@
 ---
 import { Icon } from 'astro-icon/components';
 
-interface Props {
-  class?: string;
-}
-
-const { class: className } = Astro.props;
-
 const socials = [
-  { label: 'Instagram', href: 'https://instagram.com/yourhandle', icon: 'simple-icons:instagram' },
-  { label: 'YouTube',   href: 'https://youtube.com/yourchannel', icon: 'simple-icons:youtube' },
-  { label: 'Etsy',      href: 'https://etsy.com/shop/yourshop',  icon: 'simple-icons:etsy' },
-  { label: 'Ko-fi',     href: 'https://ko-fi.com/yourpage',      icon: 'simple-icons:kofi' },
+  { label: 'Instagram', href: 'https://www.instagram.com/blueneekstudio', icon: 'simple-icons:instagram' },
+  { label: 'YouTube',   href: 'https://www.youtube.com/@BlueNeekStudio', icon: 'simple-icons:youtube' },
+  { label: 'Etsy',      href: 'https://www.etsy.com/shop/BlueNeekStudio',  icon: 'simple-icons:etsy' },
+  { label: 'Ko-fi',     href: 'https://ko-fi.com/blueneekstudio',      icon: 'simple-icons:kofi' },
 ];
 ---
-<div class:list={['socials', className]}>
-  {socials.map((social) => (
-    <a
-      class="socials__link"
-      href={social.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={social.label}
-    >
-      <Icon class="socials__icon" name={social.icon} />
-    </a>
-  ))}
-</div>
 
+<div class="socials">
+  <p class="socials__heading">Follow me here:</p>
+  <div class="socials__icons">
+    {socials.map((social) => (
+      <a
+        class="socials__link"
+        href={social.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={social.label}
+      >
+        <Icon class="socials__icon" name={social.icon} />
+      </a>
+    ))}
+  </div>
+</div>
 
 <style>
   .socials {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .socials__heading {
+    margin: 0;
+    color: #ffffff;
+  }
+
+  .socials__icons {
+    display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
     gap: 1.5rem;
   }
@@ -42,7 +50,7 @@ const socials = [
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #000000;
+    color: #ffffff;
     transition: opacity 0.2s ease;
   }
 
@@ -51,8 +59,7 @@ const socials = [
   }
 
   .socials__icon {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
   }
-  
 </style>

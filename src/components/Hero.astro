@@ -1,0 +1,100 @@
+---
+---
+
+<section class="hero">
+  <video
+    class="hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+  >
+    <source src="/hero.mp4" type="video/mp4" />
+  </video>
+
+  <div class="hero__overlay"></div>
+
+  <h1 class="hero__title" aria-label="Blue Neek Studio">
+    <span class="hero__line" aria-hidden>Blue</span>
+    <span class="hero__line" aria-hidden>Neek</span>
+    <span class="hero__line" aria-hidden>Studio</span> 
+  </h1>
+</section>
+
+<style>
+
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+  .hero__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+  }
+
+  .hero__title {
+    position: absolute;
+    bottom: 3rem;
+    left: 3rem;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    font-family: 'Comfortaa', cursive;
+  }
+
+  .hero__line {
+    display: block;
+    color: #ffffff;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.95;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s ease forwards;
+  }
+
+  .hero__line:nth-child(1) { animation-delay: 0.3s; }
+  .hero__line:nth-child(2) { animation-delay: 0.55s; }
+  .hero__line:nth-child(3) { animation-delay: 0.8s; }
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero__title {
+      bottom: 2rem;
+      left: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero__title {
+      bottom: 1.5rem;
+      left: 1rem;
+    }
+  }
+</style>

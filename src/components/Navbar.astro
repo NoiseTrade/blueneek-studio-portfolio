@@ -1,6 +1,4 @@
 ---
-import Socials from './Socials.astro';
-
 interface Link {
   label: string;
   href: string;
@@ -11,116 +9,284 @@ interface Props {
 }
 
 const { links = [] } = Astro.props;
-const isAbout = Astro.url.pathname === '/about';
-
-const socials = [
-  { label: 'Instagram', href: 'https://instagram.com/yourhandle', icon: 'simple-icons:instagram' },
-  { label: 'YouTube',   href: 'https://youtube.com/yourchannel', icon: 'simple-icons:youtube' },
-  { label: 'Etsy',      href: 'https://etsy.com/shop/yourshop',  icon: 'simple-icons:etsy' },
-  { label: 'Ko-fi',     href: 'https://ko-fi.com/yourpage',      icon: 'simple-icons:kofi' },
-];
 ---
 
 <header class="navbar">
-  <div class="navbar__logo">
-    <a href="/">
-      <img src="/logo.png" alt="Site logo" />
-    </a>
-  </div>
-
   <nav class="navbar__nav">
+    <div class="navbar__logo">
+      <a href="/">
+        <img src="/logo.svg" alt="Blue Neek Studio logo" />
+      </a>
+    </div>
     <ul class="navbar__list">
       {links.map((link) => (
         <li class="navbar__item">
-          <a
-            class="navbar__link"
-            href={isAbout ? `/${link.href}` : link.href}
-          >
-            {link.label}
-          </a>
+          <a class="navbar__link"href={link.href}>{link.label}</a>
         </li>
       ))}
-      <li class="navbar__item">
-        <a
-          class="navbar__link"
-          href="/about"
-          data-astro-prefetch
-        >
-          About
-        </a>
-      </li>
     </ul>
   </nav>
-<Socials class='navbar__socials' /> 
+
+  <button class="navbar__burger" aria-label="Open menu" aria-expanded="false">
+    <span class="navbar__burger-line"></span> 
+    <span class="navbar__burger-line"></span>
+    <span class="navbar__burger-line"></span>  
+  </button>
 </header>
+
+<div class="navbar__mobile-menu" aria-hidden="true">
+  <div class="navbar__mobile-logo">
+    <img src="/logo.svg" alt="Blue Neek Studio logo" />
+  </div>
+  <button class="navbar__mobile-close" aria-label="Close menu">&#x2715;</button>
+  <ul class="navbar__mobile-list">
+    {links.map((link) => (
+      <li class="navbar__mobile-item">
+        <a class="navbar__mobile-link" href={link.href}>{link.label}</a>
+      </li>
+    ))}
+  </ul>
+</div>
 
 <style>
   .navbar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 1.5rem 2rem;
-  }
-
-  .navbar__logo {
-    margin-bottom: 1rem;
-  }
-
-  .navbar__logo img {
-    display: block;
-    height: 280px;
-    width: auto;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0px;
+    transition: background 0.4s ease,
+                max-width 0.4s ease,
+                border-color 0.4s ease,
+                border-radius 0.4s ease,
+                top 0.4s ease,
+                padding 0.4s ease;
   }
 
   .navbar__nav {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    justify-content: center;
+  }
+
+  .navbar__logo img {
+    display: block;
+    height: 70px;
+    width: auto;
   }
 
   .navbar__list {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
-    gap: 2rem;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
+  .navbar__item {
+    display: flex;
+    justify-content: center;
+  }
 
   .navbar__link {
     text-decoration: none;
+    font-size: 1.125rem;
+    color: #ffffff;
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.4s ease;
   }
 
-  .navbar__link:hover {
-    text-decoration: underline;
+  .navbar__link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    right: 50%;
+    height: 1px;
+    background: currentColor;
+    transition: left 0.3s ease, right 0.3s ease;
   }
 
-  .navbar__socials {
-    display: flex;
-    flex-direction: row;
+  .navbar__link:hover::after {
+    left: 0;
+    right: 0;
+  }
+
+  /* Burger — hidden on desktop */
+  .navbar__burger {
+    display: none;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1.5rem;
-    margin-top: 1rem;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
   }
 
-  .navbar__social-link {
+  .navbar__burger-line {
+    display: block;
+    width: 1.5rem;
+    height: 2px;
+    background: #ffffff;
+    transition: background 0.4s ease;
+  }
+
+  /* Mobile menu */
+  .navbar__mobile-menu {
     display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: #faf7f2;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #000000;
+    gap: 2rem;
+    transform: translateX(100%);
+    transition: transform 0.4s ease, visibility 0.4s ease;
+    visibility: hidden;
+  }
+
+  .navbar__mobile-menu.is-open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .navbar__mobile-logo {
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .navbar__mobile-logo img {
+    display: block;
+    height: 70px;
+    width: auto;
+  }
+
+  .navbar__mobile-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
     transition: opacity 0.2s ease;
   }
 
-  .navbar__social-link:hover {
+  .navbar__mobile-close:hover {
     opacity: 0.7;
   }
 
-  .navbar__social-icon {
-    width: 1.5625rem;
-    height: 1.5625rem;
-    fill: none;
-    stroke: #000000;
+  .navbar__mobile-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .navbar__mobile-link {
+    text-decoration: none;
+    color: inherit;
+    font-size: 2rem;
+    white-space: nowrap;
+  }
+
+  .navbar__mobile-link:hover {
+    opacity: 0.7;
+  }
+
+  /* Scrolled state — desktop */
+  @media (min-width: 769px) {
+    .navbar.is-scrolled {
+      background: #ffffff;
+      max-width: fit-content;
+      top: 1rem;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      border-radius: 999px;
+      border-color: rgba(0, 0, 0, 0.1);
+      padding: 0.75rem 2rem;
+    }
+
+    .navbar.is-scrolled .navbar__link {
+      color: #000000;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .navbar__nav {
+      display: none;
+    }
+
+    .navbar__burger {
+      display: flex;
+    }
+
+    .navbar.is-scrolled .navbar__burger-line {
+      background: #000000;
+    }
   }
 </style>
+
+<script>
+  const burger = document.querySelector('.navbar__burger');
+  const mobileMenu = document.querySelector('.navbar__mobile-menu');
+  const closeBtn = document.querySelector('.navbar__mobile-close');
+  const mobileLinks = document.querySelectorAll('.navbar__mobile-link');
+  const navbar = document.querySelector('.navbar');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 180) {
+      navbar?.classList.add('is-scrolled');
+    } else {
+      navbar?.classList.remove('is-scrolled');
+    }
+  });
+
+  const openMenu = () => {
+    mobileMenu?.classList.add('is-open');
+    burger?.setAttribute('aria-expanded', 'true');
+    mobileMenu?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeMenu = () => {
+    mobileMenu?.classList.remove('is-open');
+    burger?.setAttribute('aria-expanded', 'false');
+    mobileMenu?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+
+  burger?.addEventListener('click', openMenu);
+  closeBtn?.addEventListener('click', closeMenu);
+
+  mobileLinks.forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+</script>

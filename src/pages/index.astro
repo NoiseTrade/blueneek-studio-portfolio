@@ -1,9 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Portfolio from '../components/PortfolioBlock.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
 ---
 
 <Layout title='BlueNeek Studio'>
-	<Portfolio heading="Bookish Art" gallery="/src/assets/books"/>
-	<Portfolio heading="Character Art" gallery="/src/assets/art"/>
+	<Hero />
+	<About />
+	<Portfolio heading="Bookish Art" gallery="/src/assets/bookish"/>
+	<Portfolio heading="Character Art" gallery="/src/assets/character-art"/>
 </Layout>

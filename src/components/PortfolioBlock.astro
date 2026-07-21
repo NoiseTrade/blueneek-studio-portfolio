@@ -44,7 +44,7 @@ const resolvedImages = await Promise.all(
 
 ---
 
-<section class="portfolio-block" id={sectionId}>
+<section class="portfolio-block animate-on-scroll" id={sectionId}>
   <h2 class="portfolio-block__heading">{heading}</h2>
 
   <div class="portfolio-block__grid">
@@ -80,10 +80,9 @@ const resolvedImages = await Promise.all(
   }
 
   .portfolio-block__heading {
-    text-align: center;
+    text-align: left;
     margin-bottom: 2rem;
     font-size: 36px;
-    color: #2D2C2B;
    @media (min-width: 768px) {
         font-size: 40px;
     }
