@@ -50,6 +50,18 @@ const { title } = Astro.props;
 			document.querySelectorAll('.animate-on-scroll').forEach((el) => {
 				observer.observe(el);
 			});
+
+			document.addEventListener('contextmenu', (e) => {
+				if (e.target instanceof HTMLImageElement) {
+					e.preventDefault();
+				}
+			});
+
+			document.addEventListener('dragstart', (e) => {
+				if (e.target instanceof HTMLImageElement) {
+					e.preventDefault();
+				}
+			});
 		</script>
 	</body>
 </html>
@@ -85,6 +97,12 @@ const { title } = Astro.props;
   p {
     font-family: 'Comfortaa', cursive;
     font-size: 1.125rem;
+  }
+
+  img {
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
   }
 
 
